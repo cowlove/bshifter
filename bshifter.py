@@ -66,14 +66,14 @@ def create_driver_session(session_id, executor_url):
 
 
 if len(argv) < 3 :
-    with webdriver.Firefox() as driver:
-        driver.get("https://bshifter.com/Loginpage.aspx")
-        url = driver.command_executor._url  
-        session_id = driver.session_id      
-        print(url + " " + session_id + "\n")
-        if len(argv) == 2:
-            while 1:
-                sleep(1)
+    driver = webdriver.Firefox()
+    driver.get("https://bshifter.com/Loginpage.aspx")
+    url = driver.command_executor._url  
+    session_id = driver.session_id      
+    print(url + " " + session_id + "\n")
+    if len(argv) == 2:
+        while 1:
+            sleep(1)
 else:
     executor_url = argv[1]
     session_id = argv[2]
@@ -128,7 +128,7 @@ while 1:
         0    
 
     # Check for next button 
-    while 1:
+    for x in range(20):
         if len(driver.find_elements(By.ID, "nextLinkNavItem")) > 0:
             nxt = driver.find_element(By.ID, "nextLinkNavItem")
             oh = nxt.get_attribute("outerHTML")
@@ -137,6 +137,7 @@ while 1:
                 sleep(5)
                 nxt.click()
                 break
+        sleep(1)
 
     sleep(5)
 
