@@ -83,11 +83,15 @@ wait = WebDriverWait(driver, 10)
 
 
 while 1:
-    ps = str(driver.page_source)
+    try: 
+        ps = str(driver.page_source)
+        print(ps)
+        print("\n\n")
+        playVideo("radiobtnIncomplete", "radioBtn")
+        playVideo("chiefbtnIncomplete", "chiefBtn")
+    except Exception as ex:
+        print(ex)
 
-    playVideo("radiobtnIncomplete", "radioBtn")
-    playVideo("chiefbtnIncomplete", "chiefBtn")
- 
     try:
         #print (ps)
         pick3 = False
@@ -119,6 +123,28 @@ while 1:
             Select(driver.find_element_by_id("studentAnswer" + str(sa))).select_by_index(1)
         except:
             0
+
+    try:
+        if len(driver.find_elements(By.ID, "rdobuttonSize1")) > 0:
+            for x in ("rdobuttonSize1", "rdobuttonHeight1", "rdobuttonSize1", "rdobuttonHeight1", "rdobuttonccupancy1", "rdobuttonSmoke1", 
+                "chkboxLocationFloor1",
+                "chkboxLocationSide1", "chkboxTasks1", "rdobuttonPlanLocationSide1", "rdobuttonPlanLocationFloor1", "chkboxObjectives2",
+                "rdobuttonStrategy1", "rdobuttonResource1", "chkboxAssume"):
+                try:
+                    print(x)
+                    e = driver.find_element_by_id(x);
+                    if not e.is_selected():
+                        driver.find_element_by_id(x).click()
+                except Exception as ex:
+                    print(ex)
+            rb = driver.find_element(By.ID, "submitRadioBtn")
+            if (rb.get_attribute("class") != "disabled checked"):
+                rb.click() 
+    except Exception as ex:
+        print(ex)
+
+
+
     try:
         rb = driver.find_element(By.ID, "submitRadioBtn")
         if (rb.get_attribute("class") != "disabled checked"):
@@ -129,14 +155,17 @@ while 1:
 
     # Check for next button 
     for x in range(20):
-        if len(driver.find_elements(By.ID, "nextLinkNavItem")) > 0:
-            nxt = driver.find_element(By.ID, "nextLinkNavItem")
-            oh = nxt.get_attribute("outerHTML")
-            if not re.match('.*class="disabled"', oh):
-                print("Found <NEXT> button, page complete.")
-                sleep(5)
-                nxt.click()
-                break
+        try:
+            if len(driver.find_elements(By.ID, "nextLinkNavItem")) > 0:
+                nxt = driver.find_element(By.ID, "nextLinkNavItem")
+                oh = nxt.get_attribute("outerHTML")
+                if not re.match('.*class="disabled"', oh):
+                    print("Found <NEXT> button, page complete.")
+                    sleep(5)
+                    nxt.click()
+                    break
+        except Exception as ex:
+            print(ex)
         sleep(1)
 
     sleep(5)
