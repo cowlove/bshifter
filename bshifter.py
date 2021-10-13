@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 -u
 from selenium import webdriver  
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -129,15 +129,10 @@ while 1:
         #if len(driver.find_elements(By.ID, "rdobuttonSize1")) > 0 or len(driver.find_elements(By.ID, "chkboxPerform")) > 0:
         if 1:
             for x in ("rdobuttonSize1", "rdobuttonHeight1", "rdobuttonSize1", "rdobuttonHeight1", "rdobuttonccupancy1", "rdobuttonSmoke1", 
-                "chkboxLocationFloor1",
+                "chkboxLocationFloor1", "RdobuttonLocationSide1", "rdobuttonChanges1", "rdobuttonStrategy1", "rdobuttonResource1", "chkboxAssume",
                 "chkboxLocationSide1", "chkboxTasks1", "rdobuttonPlanLocationSide1", "rdobuttonPlanLocationFloor1", "chkboxObjectives2",
-                "rdobuttonStrategy1", "rdobuttonResource1", "chkboxAssume",
                 "chkboxPerform", "rdobuttonStories1", "rdobuttonBasement1", "rdobuttonBasementFire1", "rdobuttonLife1", "chkBoxYes", "chkBoxHazardYes",
-                "chkboxHazard1", "chkboxObjectives1", 
-
-                "ChkboxTasks1", "RdobuttonLocationFloor1", "ChkboxObjectives1",
-                "RdobuttonLocationSide1"
-
+                "chkboxHazard1", "chkboxObjectives1", "ChkboxTasks1", "RdobuttonLocationFloor1", "ChkboxObjectives1"
                 ):
                 try:
                     print(x)
@@ -176,6 +171,10 @@ while 1:
                 if not re.match('.*class="disabled"', oh):
                     print("Found <NEXT> button, page complete.")
                     sleep(5)
+                    print(driver.current_url)
+                    ps = str(driver.page_source)
+                    print(ps)
+                    print("\n\n")
                     nxt.click()
                     break
         except Exception as ex:
