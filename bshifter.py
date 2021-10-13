@@ -124,27 +124,41 @@ while 1:
         except:
             0
 
+    # Two kinds of IRR reports start with "rdobuttonSize1" or "chkboxPerform" choices:
     try:
-        if len(driver.find_elements(By.ID, "rdobuttonSize1")) > 0:
+        #if len(driver.find_elements(By.ID, "rdobuttonSize1")) > 0 or len(driver.find_elements(By.ID, "chkboxPerform")) > 0:
+        if 1:
             for x in ("rdobuttonSize1", "rdobuttonHeight1", "rdobuttonSize1", "rdobuttonHeight1", "rdobuttonccupancy1", "rdobuttonSmoke1", 
                 "chkboxLocationFloor1",
                 "chkboxLocationSide1", "chkboxTasks1", "rdobuttonPlanLocationSide1", "rdobuttonPlanLocationFloor1", "chkboxObjectives2",
-                "rdobuttonStrategy1", "rdobuttonResource1", "chkboxAssume"):
+                "rdobuttonStrategy1", "rdobuttonResource1", "chkboxAssume",
+                "chkboxPerform", "rdobuttonStories1", "rdobuttonBasement1", "rdobuttonBasementFire1", "rdobuttonLife1", "chkBoxYes", "chkBoxHazardYes",
+                "chkboxHazard1", "chkboxObjectives1", 
+
+                "ChkboxTasks1", "RdobuttonLocationFloor1", "ChkboxObjectives1",
+                "RdobuttonLocationSide1"
+
+                ):
                 try:
                     print(x)
-                    e = driver.find_element_by_id(x);
+                    e = driver.find_element_by_id(x)
                     if not e.is_selected():
-                        driver.find_element_by_id(x).click()
+                        print ("clicking")
+                        #driver.execute_script("arguments[0].click();", e)
+                        ActionChains(driver).move_to_element(e).perform()
+                        sleep(1)
+                        e.click()
+                        sleep(1)
                 except Exception as ex:
                     print(ex)
-            rb = driver.find_element(By.ID, "submitRadioBtn")
-            if (rb.get_attribute("class") != "disabled checked"):
-                rb.click() 
+
+            #rb = driver.find_element(By.ID, "submitRadioBtn")
+            #if (rb.get_attribute("class") != "disabled checked"):
+            #    rb.click() 
     except Exception as ex:
         print(ex)
 
-
-
+    # General submit button for all sorts of user quizzes 
     try:
         rb = driver.find_element(By.ID, "submitRadioBtn")
         if (rb.get_attribute("class") != "disabled checked"):
