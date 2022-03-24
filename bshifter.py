@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 -u
 from selenium import webdriver  
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -83,11 +83,15 @@ wait = WebDriverWait(driver, 10)
 
 
 while 1:
-    ps = str(driver.page_source)
+    try: 
+        ps = str(driver.page_source)
+        print(ps)
+        print("\n\n")
+        playVideo("radiobtnIncomplete", "radioBtn")
+        playVideo("chiefbtnIncomplete", "chiefBtn")
+    except Exception as ex:
+        print(ex)
 
-    playVideo("radiobtnIncomplete", "radioBtn")
-    playVideo("chiefbtnIncomplete", "chiefBtn")
- 
     try:
         #print (ps)
         pick3 = False
@@ -119,6 +123,37 @@ while 1:
             Select(driver.find_element_by_id("studentAnswer" + str(sa))).select_by_index(1)
         except:
             0
+
+    # Two kinds of IRR reports start with "rdobuttonSize1" or "chkboxPerform" choices:
+    try:
+        #if len(driver.find_elements(By.ID, "rdobuttonSize1")) > 0 or len(driver.find_elements(By.ID, "chkboxPerform")) > 0:
+        if 1:
+            for x in ("rdobuttonSize1", "rdobuttonHeight1", "rdobuttonSize1", "rdobuttonHeight1", "rdobuttonccupancy1", "rdobuttonSmoke1", 
+                "chkboxLocationFloor1", "RdobuttonLocationSide1", "rdobuttonChanges1", "rdobuttonStrategy1", "rdobuttonResource1", "chkboxAssume",
+                "chkboxLocationSide1", "chkboxTasks1", "rdobuttonPlanLocationSide1", "rdobuttonPlanLocationFloor1", "chkboxObjectives2",
+                "chkboxPerform", "rdobuttonStories1", "rdobuttonBasement1", "rdobuttonBasementFire1", "rdobuttonLife1", "chkBoxYes", "chkBoxHazardYes",
+                "chkboxHazard1", "chkboxObjectives1", "ChkboxTasks1", "RdobuttonLocationFloor1", "ChkboxObjectives1"
+                ):
+                try:
+                    print(x)
+                    e = driver.find_element_by_id(x)
+                    if not e.is_selected():
+                        print ("clicking")
+                        #driver.execute_script("arguments[0].click();", e)
+                        ActionChains(driver).move_to_element(e).perform()
+                        sleep(1)
+                        e.click()
+                        sleep(1)
+                except Exception as ex:
+                    print(ex)
+
+            #rb = driver.find_element(By.ID, "submitRadioBtn")
+            #if (rb.get_attribute("class") != "disabled checked"):
+            #    rb.click() 
+    except Exception as ex:
+        print(ex)
+
+    # General submit button for all sorts of user quizzes 
     try:
         rb = driver.find_element(By.ID, "submitRadioBtn")
         if (rb.get_attribute("class") != "disabled checked"):
@@ -129,14 +164,21 @@ while 1:
 
     # Check for next button 
     for x in range(20):
-        if len(driver.find_elements(By.ID, "nextLinkNavItem")) > 0:
-            nxt = driver.find_element(By.ID, "nextLinkNavItem")
-            oh = nxt.get_attribute("outerHTML")
-            if not re.match('.*class="disabled"', oh):
-                print("Found <NEXT> button, page complete.")
-                sleep(5)
-                nxt.click()
-                break
+        try:
+            if len(driver.find_elements(By.ID, "nextLinkNavItem")) > 0:
+                nxt = driver.find_element(By.ID, "nextLinkNavItem")
+                oh = nxt.get_attribute("outerHTML")
+                if not re.match('.*class="disabled"', oh):
+                    print("Found <NEXT> button, page complete.")
+                    sleep(5)
+                    print(driver.current_url)
+                    ps = str(driver.page_source)
+                    print(ps)
+                    print("\n\n")
+                    nxt.click()
+                    break
+        except Exception as ex:
+            print(ex)
         sleep(1)
 
     sleep(5)
