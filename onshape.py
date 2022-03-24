@@ -41,10 +41,10 @@ if len(argv) < 3 :
     driver.get("https://cad.onshape.com/signin")
     url = driver.command_executor._url  
     session_id = driver.session_id      
-    print(url + " " + session_id + "\n")
-    #if len(argv) == 2:
-    #    while 1:
-    #        sleep(1)
+    print("./onshape.py " + url + " " + session_id + "\n")
+    if len(argv) == 2:
+        while 1:
+            sleep(1)
 else:
     executor_url = argv[1]
     session_id = argv[2]
@@ -96,6 +96,7 @@ def exists(xpath):
 partStudio = "female test chip"
 
 if 1:
+    # Log in 
     e = exists('//input[@placeholder="Email"]')
     if e: 
         e.send_keys("jim@vheavy.com")
@@ -106,11 +107,21 @@ if 1:
     if e:
         e.click()
 		
+    e = exists('//img[@class="navbar-onshape-logo"]')
+    if e:
+        e.click()
+   
+    # Open first document in recent documents list, if on documents page 
+    e = exists('(//span[@class="os-document-display-name"])[1]')
+    if e:
+        e.click()
+        #ActionChains(driver).double_click().perform()
 
-
-
+    # Wait for the part studio 
     e = waitfor('//element-name[@data-original-title="' + partStudio + '"]')
-    e.click()
+    e = waitfor('//element-name[@data-original-title="' + partStudio + '"]')
+    sleep(2)
+    #e.click()
     ActionChains(driver).move_to_element(e).context_click().perform()
  
     e = waitfor('//span[text()="Export…"]')
