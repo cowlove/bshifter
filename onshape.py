@@ -7,8 +7,13 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 
+from selenium.webdriver.firefox.options import Options
+opts = Options()
 
+profile = webdriver.FirefoxProfile()
+profile.set_preference("browser.download.folderList", 2)
 
+print(profile.default_preferences)
 from time import sleep
 from sys import argv
 import re
@@ -54,6 +59,18 @@ wait = WebDriverWait(driver, 10)
 
 default_timeout = 20
 sleep_granularity = .2
+
+def waitforandclick(xpath, tmo=default_timeout):
+    print("Waiting for " + xpath)
+    for n in range(int(tmo/sleep_granularity)):
+        try:
+            e = driver.find_element_by_xpath(xpath)
+            e.click()
+            return e
+        except Exception as e:
+            print(e)
+            sleep(sleep_granularity)
+    return False
 
 def waitfor(xpath, tmo=default_timeout):
     print("Waiting for " + xpath)
@@ -107,23 +124,26 @@ if 1:
     if e:
         e.click()
 		
-    e = exists('//img[@class="navbar-onshape-logo"]')
+    e = waitfor('//img[@class="navbar-onshape-logo"]')
     if e:
         e.click()
    
     # Open first document in recent documents list, if on documents page 
-    e = exists('(//span[@class="os-document-display-name"])[1]')
-    if e:
-        e.click()
-        #ActionChains(driver).double_click().perform()
-
+    waitforandclick('(//span[@class="os-document-display-name"])[1]')
+    
     # Wait for the part studio 
     e = waitfor('//element-name[@data-original-title="' + partStudio + '"]')
     e = waitfor('//element-name[@data-original-title="' + partStudio + '"]')
     sleep(2)
     #e.click()
-    ActionChains(driver).move_to_element(e).context_click().perform()
- 
+    try:
+        ActionChains(driver).move_to_element(e).context_click().perform()
+    except:
+        e = waitfor('//element-name[@data-original-title="' + partStudio + '"]')
+        e.click()
+        ActionChains(driver).move_to_element(e).context_click().perform()
+   
+
     e = waitfor('//span[text()="Export…"]')
     e.click()
 	
@@ -135,4 +155,5 @@ if 1:
     
     
 	
+print(profile.default_preferences)
 
