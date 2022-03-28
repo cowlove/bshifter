@@ -139,7 +139,8 @@ class AutoWebDriver:
     def click(self, xpath, tmo=default_timeout):
         print("Clicking " + xpath)
         e = self.waitInteractable(xpath, tmo)
-        e.click()
+        if e:
+            e.click()
 
     def rclick(self, xpath, tmo=default_timeout):
         print("RClicking " + xpath)

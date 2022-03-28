@@ -4,6 +4,10 @@ import time
 from os import listdir
 from os.path import isfile, join, expanduser
 import re
+
+# TODO: look for first partStudio name if one isn't provided on cmd line
+# TODO: wait for download file to arrive and finish growing in length before exiting
+
 partStudio = "female test chip"
 
 ver = 1
@@ -13,6 +17,9 @@ for f in listdir(expanduser("~/Downloads/")):
         ver = max(ver, int(m.group(1)) + 1)
 
 w = AutoWebDriver.AutoWebDriver()
+
+
+w.click('//a[@class="alert-link os-message-bubble-link"]', .1)
 
 if not w.exists('//element-name[@data-original-title="' + partStudio + '"]'):
     # Can't see partStudio tab, try logging in and reselecting first document  
