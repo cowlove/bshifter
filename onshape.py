@@ -1,20 +1,23 @@
 #!/usr/bin/python3 -u
 import AutoWebDriver 
 import time
-import os
-
+from os import listdir
+from os.path import isfile, join, expanduser
+import re
 partStudio = "female test chip"
-startPage = "https://cad.onshape.com/signin"
 
+ver = 1
+for f in listdir(expanduser("~/Downloads/")):
+    m = re.match("N(\d+) " + partStudio + ".stl", f)
+    if (m):
+        ver = max(ver, int(m.group(1)) + 1)
 
 w = AutoWebDriver.AutoWebDriver()
 
 if not w.exists('//element-name[@data-original-title="' + partStudio + '"]'):
     # Can't see partStudio tab, try logging in and reselecting first document  
-    w.get(startPage)
-    print ("Waiting for document to load")
+    w.get("https://cad.onshape.com/signin")
     w.waitPageLoaded()
-    print ("Document loaded")
     time.sleep(2)
     e = w.exists('//input[@placeholder="Email"]')
     if e: 
@@ -27,7 +30,7 @@ if not w.exists('//element-name[@data-original-title="' + partStudio + '"]'):
 w.click('//element-name[@data-original-title="' + partStudio + '"]')
 w.rclick('//element-name[@data-original-title="' + partStudio + '"]')
 w.click('//span[text()="Export…"]')	
-w.keys('//input[@id="export-filename-input"]', "N001 " + partStudio)
+w.keys('//input[@id="export-filename-input"]', "N%04d %s"  % (ver, partStudio))
 w.click('//button[text()="OK"]')
             
 
