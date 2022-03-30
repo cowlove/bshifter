@@ -93,24 +93,31 @@ class AutoWebDriver:
 
     def opendriver(self):         
         self.driver = False
-        line = open(self.idFile, "r").read()
-        words = line.split()
-        executor_url = words[0]
-        session_id = words[1]
-        print ("Trying to connect to remote server " + self.idFile + " " + line)
-        self.driver = self.create_driver_session(session_id, executor_url)
-        if checkdriver(self.driver, 1) == False:
-            p = EverLastingProcess(target=daemon, args=(self.idFile,), daemon=False)
-            p.start()
-      
-        while checkdriver(self.driver, 1) == False:
-            sleep(1)
+        try:
             line = open(self.idFile, "r").read()
             words = line.split()
             executor_url = words[0]
             session_id = words[1]
             print ("Trying to connect to remote server " + self.idFile + " " + line)
             self.driver = self.create_driver_session(session_id, executor_url)
+        except:
+            self.driver = False
+        
+        if checkdriver(self.driver, 1) == False:
+            p = EverLastingProcess(target=daemon, args=(self.idFile,), daemon=False)
+            p.start()
+      
+        while checkdriver(self.driver, 1) == False:
+            sleep(1)
+            try:
+                line = open(self.idFile, "r").read()
+                words = line.split()
+                executor_url = words[0]
+                session_id = words[1]
+                print ("Trying to connect to remote server " + self.idFile + " " + line)
+                self.driver = self.create_driver_session(session_id, executor_url)
+            except:
+                self.driver = False
 
         print ("Connected to remote server " + self.idFile + " " + line)
 

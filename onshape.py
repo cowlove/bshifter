@@ -8,7 +8,7 @@ import re
 # TODO: look for first partStudio name if one isn't provided on cmd line
 # TODO: wait for download file to arrive and finish growing in length before exiting
 
-partStudio = "female test chip"
+partStudio = "print"
 
 ver = 1
 for f in listdir(expanduser("~/Downloads/")):
