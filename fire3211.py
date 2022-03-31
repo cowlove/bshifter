@@ -319,8 +319,21 @@ def emsReport():
 
 eso.driver.set_window_size("1200", "800")
 
+if (not eso.exists('//button[@class="action-button hamburger-bg"]')) and (not eso.exists('//button[@class="more hamburger-bg"]')) and (not eso.exists('//button[@class="icons-hamburger"]')):
+    eso.get("https://www.esosuite.net/")
+    eso.waitPageLoaded()
+    eso.cl('//input[@name="username"]')
+    eso.sk('//input[@name="username"]', 'jevans')
 
-#eso.get("https://www.esosuite.net/")
+    eso.cl('//input[@name="password"]')
+    eso.sk('//input[@name="password"]', 'jevans2')
+
+    eso.cl('//input[@name="agency"]')
+    eso.sk('//input[@name="agency"]', 'tukwilafd')
+
+    eso.cl('//button[@class="btn login-button"]')
+
+
 
 while True:
     root = Tk()
@@ -329,22 +342,6 @@ while True:
     if not d.okPressed: 
         exit()
 
-
-    if eso.exists('//input[@name="username"]'):
-        print("LOGIN")
-        eso.cl('//input[@name="username"]')
-        eso.sk('//input[@name="username"]', 'jevans')
-
-        eso.cl('//input[@name="password"]')
-        eso.sk('//input[@name="password"]', 'jevans2')
-
-        eso.cl('//input[@name="agency"]')
-        eso.sk('//input[@name="agency"]', 'tukwilafd')
-
-
-        eso.cl('//button[@class="btn login-button"]')
-
-    #ps = str(driver.page_source)
 
     if eso.exists("//current-patient"):
         emsReport()
