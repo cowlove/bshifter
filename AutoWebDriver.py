@@ -44,7 +44,10 @@ def checkdriver(driver, timeout):
 
 def daemon(idFile):
     # Server daemon side of the fork()
-    driver = webdriver.Firefox()
+    opt = webdriver.FirefoxOptions()
+    opt.set_preference("geo.enabled", False)
+    opt.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/sla")
+    driver = webdriver.Firefox(options=opt)
     url = driver.command_executor._url  
     session_id = driver.session_id     
     print(url + " " + session_id, file = open(idFile, 'w'))
@@ -73,6 +76,7 @@ class AutoWebDriver:
 
     def create_driver_session(self, session_id, executor_url):
         from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
+
         # Save the original function, so we can revert our patch
         org_command_execute = RemoteWebDriver.execute
         def new_command_execute(self, command, params=None):

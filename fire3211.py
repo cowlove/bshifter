@@ -9,6 +9,9 @@ from tkinter import *
 from tkinter import simpledialog
 from eso import Eso
 
+date=date.today().strftime("%m%d%Y")
+eso = Eso()
+
 class MyDialog(simpledialog.Dialog):
     def __init__(self, master):
         self.okPressed = False
@@ -76,13 +79,9 @@ class MyDialog(simpledialog.Dialog):
         self.row += 1
 
 
-
-
     def apply(self):
         self.okPressed = True
 
-date=date.today().strftime("%m%d%Y")
-eso = Eso()
 
 def fireReport():
     global d
@@ -145,18 +144,10 @@ def fireReport():
     eso.cl('//label[text()="Validation Issues"]')
 
 
-
-def waitforClick(x):
-   eso.waitfor(x)
-   eso.cl(x)
-
-
 def emsReport():
     global d
     global date
     global driver
-
-
  
     # Click out of any shelf trays that happen to be up 
     eso.cl('//shelf-panel//button[text()="OK"]', tmo=.5) 
@@ -168,9 +159,9 @@ def emsReport():
      
 
  
-    waitforClick('//button[text()="CAD Import"]')
-    waitforClick('//button[text()="Update data"]')
-    waitforClick('//button[text()="Refresh with new data"]')
+    eso.cl('//button[text()="CAD Import"]')
+    eso.cl('//button[text()="Update data"]')
+    eso.cl('//button[text()="Refresh with new data"]')
 
     eso.ssEms("incident.response.runTypeId", "911")
     eso.ssEms("incident.response.priorityId", "Emer")
@@ -224,8 +215,8 @@ def emsReport():
             # TODO d.name.get() doesn't work, does it have a <CR>?
             # TODO blindly clicks, will deselect if a role is already selected 
             
-            #x = '(//incident-crew//grid-row//div[@class="name"])[' + str(unit) + '][contains(text(), "' + d.name.get() + '")]'
-            x = '(//incident-crew//grid-row//div[@class="name"])[' + str(unit) + '][contains(text(), "EVA")]'
+            x = '(//incident-crew//grid-row//div[@class="name"])[' + str(unit) + '][contains(text(), "' + d.name.get() + '")]'
+            #x = '(//incident-crew//grid-row//div[@class="name"])[' + str(unit) + '][contains(text(), "EVA")]'
             if (eso.exists(x)):
                 row = 2
             else:
@@ -316,32 +307,33 @@ def emsReport():
         if eso.exists('//strong[text()="At Patient"]'):
             print ("AT PATIENT")
 
-
 eso.driver.set_window_size("1200", "800")
 
-if (not eso.exists('//button[@class="action-button hamburger-bg"]')) and (not eso.exists('//button[@class="more hamburger-bg"]')) and (not eso.exists('//button[@class="icons-hamburger"]')):
-    eso.get("https://www.esosuite.net/")
-    eso.waitPageLoaded()
-    eso.cl('//input[@name="username"]')
-    eso.sk('//input[@name="username"]', 'jevans')
-
-    eso.cl('//input[@name="password"]')
-    eso.sk('//input[@name="password"]', 'jevans2')
-
-    eso.cl('//input[@name="agency"]')
-    eso.sk('//input[@name="agency"]', 'tukwilafd')
-
-    eso.cl('//button[@class="btn login-button"]')
 
 
+
+#exit()
 
 while True:
+    if (not eso.exists('//button[@class="action-button hamburger-bg"]')) and (not eso.exists('//button[@class="more hamburger-bg"]')) and (not eso.exists('//button[@class="icons-hamburger"]')):
+        eso.get("https://www.esosuite.net/")
+        eso.waitPageLoaded()
+        eso.cl('//input[@name="username"]')
+        eso.sk('//input[@name="username"]', 'jevans')
+        eso.cl('//input[@name="password"]')
+        eso.sk('//input[@name="password"]', 'jevans2')
+        eso.cl('//input[@name="agency"]')
+        eso.sk('//input[@name="agency"]', 'tukwilafd')
+        eso.cl('//button[@class="btn login-button"]')
+        sleep(1)
+        eso.waitPageLoaded()
+        eso.get("https://www.esosuite.net/ehr")
+
     root = Tk()
     root.withdraw()
     d = MyDialog(root)
     if not d.okPressed: 
         exit()
-
 
     if eso.exists("//current-patient"):
         emsReport()
