@@ -1,5 +1,6 @@
 #!/usr/bin/python3 -u
 import AutoWebDriver 
+from selenium.webdriver.common.by import By
 import time
 from os import listdir
 from os.path import isfile, join, expanduser
@@ -8,20 +9,14 @@ import re
 # TODO: look for first partStudio name if one isn't provided on cmd line
 # TODO: wait for download file to arrive and finish growing in length before exiting
 
-partStudio = "print"
+#partStudio = "print"
 
-ver = 1
-for f in listdir(expanduser("~/Downloads/")):
-    m = re.match("N(\d+) " + partStudio + ".stl", f)
-    if (m):
-        ver = max(ver, int(m.group(1)) + 1)
 
 w = AutoWebDriver.AutoWebDriver()
 
-
 w.click('//a[@class="alert-link os-message-bubble-link"]', .1)
 
-if not w.exists('//element-name[@data-original-title="' + partStudio + '"]'):
+if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
     # Can't see partStudio tab, try logging in and reselecting first document  
     w.get("https://cad.onshape.com/signin")
     w.waitPageLoaded()
@@ -33,6 +28,16 @@ if not w.exists('//element-name[@data-original-title="' + partStudio + '"]'):
         w.click('//button[text()="Sign in"]')
     w.click('//img[@class="navbar-onshape-logo"]')
     w.click('(//span[@class="os-document-display-name"])[1]') # First document in list
+
+partStudio = ""
+e = w.driver.find_element(By.XPATH, '(//span[@class="os-tab-name"])[1]')
+partStudio = e.text
+print(partStudio)
+ver = 1
+for f in listdir(expanduser("~/Downloads/")):
+    m = re.match("N(\d+) " + partStudio + ".stl", f)
+    if (m):
+        ver = max(ver, int(m.group(1)) + 1)
 
 w.click('//element-name[@data-original-title="' + partStudio + '"]')
 w.rclick('//element-name[@data-original-title="' + partStudio + '"]')
