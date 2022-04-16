@@ -20,7 +20,7 @@ while True:
             cmd = ""
         m = re.match('[^"]*\](.*)', line)
         if m:
-            cmd += m.group(1)
+            cmd += m.group(1) + "\n"
         if re.search(' -l "0" ', line):
             cmd = cmd.replace(' -l "0" ', ' -l "$1" ')
             fname = outDir + datetime.now().strftime("/curaSlice-%Y%m%d-%H%M%S.sh")
@@ -31,3 +31,5 @@ while True:
             f.close()
             chmod(fname, 0o755)
             print("Wrote curaSlice script '" + fname + "'")
+            print("rm curaslice.sh; ln -s '" + fname + "' curaslice.sh")
+
