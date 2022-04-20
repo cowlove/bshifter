@@ -61,6 +61,8 @@ class Eso(AutoWebDriver.AutoWebDriver):
     def sk(self, xpath, keys, tmo = default_timeout):
         for n in range(int(tmo/self.sleep_granularity)):
             try: 
+                e = self.waitInteractable(xpath)
+                e.clear()
                 self.keys(xpath, keys, tmo)
                 return
             except Exception as e:
@@ -141,4 +143,15 @@ class Eso(AutoWebDriver.AutoWebDriver):
         xp = '//*[@field-ref="' + id + '"]'
         self.cl(xp, tmo)
         self.sk('//input[@ng-model="searchString"]', text, tmo)
+        
+        if (self.exists("//eso-single-select-panel")): 
+            self.cl('//eso-single-select-panel//li//div//mark[contains(' + 
+                'translate(text(), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"),' +
+                'translate("' + text + '", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"))]', tmo)
+            self.cl('//eso-single-select-shelf//button[text()="OK"]', tmo=.5) 
+        else: 
+            self.cl('//eso-multi-select-panel//li//div//mark[contains(' + 
+                'translate(text(), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"),' +
+                'translate("' + text + '", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"))]', tmo)
+            self.cl('//eso-multi-select-shelf//button[text()="OK"]', tmo=.5) 
 

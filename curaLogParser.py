@@ -7,7 +7,7 @@ from os import chmod
 
 outDir = expanduser("~/tmp")
 
-process = subprocess.Popen(['cura', ''], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+process = subprocess.Popen(['cura', '--debug'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 cmd = ""
 while True:
     line = process.stderr.readline()
@@ -16,7 +16,7 @@ while True:
         break
     if re.search("_backendLog", line):
         #print(line)
-        if re.search(' -s date="', line):
+        if re.search(' -s time="', line):
             cmd = ""
         m = re.match('[^"]*\](.*)', line)
         if m:

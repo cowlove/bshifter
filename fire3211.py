@@ -91,23 +91,24 @@ def fireReport():
     eso.cl('//label[text()="Basic"]')
 
     # simple ones
-    eso.ss("INCIDENTTYPEID", "3211\n");
-    eso.ss("STATIONID", d.station.get() + "\n")
-    eso.ss("ACTIONTAKEN1", "32\n")
-    eso.ss("AIDGIVENORRECEIVEDID", "n\n")
-    eso.ss("LOCATIONTYPEID", "address\n")
-    eso.ss("PROPERTYUSEID", "000\n")
-    eso.ss("OFFICERINCHARGEAGENCYPERSONID", d.name.get() + "\n")
+    eso.ss("INCIDENTTYPEID", "3211");
+    eso.ss("STATIONID", d.station.get())
+    eso.ss("ACTIONTAKEN1", "32")
+    eso.ss("AIDGIVENORRECEIVEDID", "n")
+    eso.ss("LOCATIONTYPEID", "address")
+    eso.ss("PROPERTYUSEID", "000")
+    eso.ss("OFFICERINCHARGEAGENCYPERSONID", d.name.get())
     eso.cl('//eso-yes-no[@field-ref="WORKINGFIRE"]//button[@data-val="false"]')
     eso.sk('//eso-text[@field-ref="ALARMS"]//input', "1\n")
     eso.sk('//eso-text[@field-ref="REPORTWRITERASSIGNMENT"]//input', "officer\n")
 
-    # complicated ones 
-    if eso.exists('//eso-single-select[@field-ref="COVID19FACTORID"]//button[text()="No"]'):
-        eso.cl('//eso-single-select[@field-ref="COVID19FACTORID"]//button[text()="No"]')
-    else: 
-        eso.cl('//eso-single-select[@field-ref="COVID19FACTORID"]')
-        eso.sk('//input[@ng-model="searchString"]', "3\n")
+    if False:
+        # complicated ones 
+        if eso.exists('//eso-single-select[@field-ref="COVID19FACTORID"]//button[text()="No"]'):
+            eso.cl('//eso-single-select[@field-ref="COVID19FACTORID"]//button[text()="No"]')
+        else: 
+            eso.cl('//eso-single-select[@field-ref="COVID19FACTORID"]')
+            eso.sk('//input[@ng-model="searchString"]', "3\n")
 
     eso.cl('//eso-address-summary[@field-label="\'Address\'"]')
     eso.sk('//eso-zip-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
@@ -118,10 +119,12 @@ def fireReport():
     eso.cl('//eso-date[@field-ref="OFFICERINCHARGEDATE"]')
     eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
         date + "\n"])
+    eso.cl('//div[@class="filterbutton"]//button[text()="OK"]')
 
     eso.cl('//eso-date[@field-ref="REPORTWRITERDATE"]')
     eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
         date + "\n"])
+    eso.cl('//div[@class="filterbutton"]//button[text()="OK"]')
 
     eso.sk('//eso-text[@field-ref="NARRATIVEREMARKS"]//textarea[@type="text"]', "See EMS report.\n")
     sleep(1)
@@ -136,9 +139,9 @@ def fireReport():
         ugrid = '(//grid-cell[@class="unit-info-cell"])[' + str(unit) + ']'
         if eso.exists(ugrid):
             eso.cl(ugrid)
-            eso.ss("UNITRESPONDINGFROMID", "in\n")
-            eso.ss("UNITPRIORITYID", "emer\n")
-            eso.ss("UNITACTIONTAKEN1", "32\n")
+            eso.ss("UNITRESPONDINGFROMID", "in")
+            eso.ss("UNITPRIORITYID", "emer")
+            eso.ss("UNITACTIONTAKEN1", "32")
             eso.cl('//edit-unit-report-toast//button[text()="OK"]')
 
     eso.cl('//label[text()="Validation Issues"]')
