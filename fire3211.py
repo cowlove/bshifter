@@ -181,6 +181,7 @@ def emsReport():
         eso.ssEms("incident.disposition.transferredToLocationID", "Tri")
         eso.ssEms("incident.destination.predefinedAddress.predefinedLocationID", d.hospital.get())
     else:
+        # TODO: This stalls out, can't find "Other"
         eso.cl('//button[text()="Other"]')
         eso.ssEms("incident.response.dispositionItemID", "No Treatment")
 
@@ -230,7 +231,7 @@ def emsReport():
 
     # Handle missing "at-patient" time 
     if (eso.exists('//span[text()="At Patient"]/../span[text()="- -"]')):
-        e = driver.find_element_by_xpath('(//span[text()="On Scene"]/../span)[2]')
+        e = eso.driver.find_element_by_xpath('(//span[text()="On Scene"]/../span)[2]')
         # Add 3 minutes to "On Scene" time 
         try: 
             t = e.text.split(':')
