@@ -218,9 +218,10 @@ def emsReport():
 
             # TODO d.name.get() doesn't work, does it have a <CR>?
             # TODO blindly clicks, will deselect if a role is already selected 
-            
-            x = '(//incident-crew//grid-row//div[@class="name"])[' + str(unit) + '][contains(text(), "' + d.name.get() + '")]'
             #x = '(//incident-crew//grid-row//div[@class="name"])[' + str(unit) + '][contains(text(), "EVA")]'
+            #print(x)
+            x = '(//incident-crew//grid-row//div[@class="name"])[' + str(unit) + '][contains(text(), "' + d.name.get().upper() + '")]'
+            print(x)
             if (eso.exists(x)):
                 row = 2
             else:
