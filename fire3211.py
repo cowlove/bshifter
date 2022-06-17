@@ -97,7 +97,10 @@ def fireReport():
     eso.ss("AIDGIVENORRECEIVEDID", "n")
     eso.ss("LOCATIONTYPEID", "address")
     eso.ss("PROPERTYUSEID", "000")
-    eso.ss("OFFICERINCHARGEAGENCYPERSONID", d.name.get())
+    #eso.ss("OFFICERINCHARGEAGENCYPERSONID", d.name.get())
+    #eso.ss("officerInCharge.personnelLabel", d.name.get())
+    eso.cl('//eso-yes-no[@field-ref="OFFICERINCHARGESAMEASREPORTWRITER"]//button[@data-val="true"]')
+
     eso.cl('//eso-yes-no[@field-ref="WORKINGFIRE"]//button[@data-val="false"]')
     eso.sk('//eso-text[@field-ref="ALARMS"]//input', "1\n")
     eso.sk('//eso-text[@field-ref="REPORTWRITERASSIGNMENT"]//input', "officer\n")
@@ -116,10 +119,10 @@ def fireReport():
     eso.cl('//shelf-panel//button[text()="OK"]')
 
 
-    eso.cl('//eso-date[@field-ref="OFFICERINCHARGEDATE"]')
-    eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
-        date + "\n"])
-    eso.cl('//div[@class="filterbutton"]//button[text()="OK"]')
+    #eso.cl('//eso-date[@field-ref="OFFICERINCHARGEDATE"]')
+    #eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
+    #    date + "\n"])
+    #eso.cl('//div[@class="filterbutton"]//button[text()="OK"]')
 
     eso.cl('//eso-date[@field-ref="REPORTWRITERDATE"]')
     eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
