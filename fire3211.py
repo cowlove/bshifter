@@ -56,12 +56,13 @@ class MyDialog(simpledialog.Dialog):
         self.row = 0;
 
         (dummy, self.name) = self.addTextEntry(master, "FF Name", "evans")
-        (dummy, self.station) = self.addTextEntry(master, "Station", "54")
-        (dummy, self.zip) = self.addTextEntry(master, "Zip", "98168")
+        (dummy, self.station) = self.addTextEntry(master, "Station", "52")
+        (dummy, self.zip) = self.addTextEntry(master, "Zip", "98188")
         (self.crib1, self.pi) = self.addTextEntry(master, "Primary Impression", "alter")
         (self.crib2, self.ssc) = self.addTextEntry(master, "S&S Category", "cognit")
         (self.crib3, self.ssd) = self.addTextEntry(master, "S&S Detail", "intox")
         (dummy, self.hospital) = self.addTextEntry(master, "Hospital", "vall")
+        (dummy, self.callType) = self.addTextEntry(master, "Call Type", "3211")
         self.male = self.addCheckbox(master, 'Male', 1)
         self.firstUnit = self.addCheckbox(master, 'First Unit', 1)
         
@@ -91,9 +92,13 @@ def fireReport():
     eso.cl('//label[text()="Basic"]')
 
     # simple ones
-    eso.ss("INCIDENTTYPEID", "3211");
     eso.ss("STATIONID", d.station.get())
-    eso.ss("ACTIONTAKEN1", "32")
+    if (d.callType.get() == "3211"):
+        eso.ss("ACTIONTAKEN1", "32")
+    else: 
+        eso.ss("ACTIONTAKEN1", "86)")
+    eso.ss("INCIDENTTYPEID", d.callType.get());
+
     eso.ss("AIDGIVENORRECEIVEDID", "n")
     eso.ss("LOCATIONTYPEID", "address")
     eso.ss("PROPERTYUSEID", "000")
@@ -129,7 +134,8 @@ def fireReport():
         date + "\n"])
     eso.cl('//div[@class="filterbutton"]//button[text()="OK"]')
 
-    eso.sk('//eso-text[@field-ref="NARRATIVEREMARKS"]//textarea[@type="text"]', "See EMS report.\n")
+    if (d.callType.get() == "3211"):
+        eso.sk('//eso-text[@field-ref="NARRATIVEREMARKS"]//textarea[@type="text"]', "See EMS report.\n")
     sleep(1)
     eso.cl('//label[text()="Basic"]')
 
@@ -144,7 +150,10 @@ def fireReport():
             eso.cl(ugrid)
             eso.ss("UNITRESPONDINGFROMID", "in")
             eso.ss("UNITPRIORITYID", "emer")
-            eso.ss("UNITACTIONTAKEN1", "32")
+            if (d.callType.get() == "3211"):
+                eso.ss("UNITACTIONTAKEN1", "32")
+            else: 
+                eso.ss("UNITACTIONTAKEN1", "86)")
             eso.cl('//edit-unit-report-toast//button[text()="OK"]')
 
     eso.cl('//label[text()="Validation Issues"]')
@@ -165,9 +174,9 @@ def emsReport():
      
 
  
-    eso.cl('//button[text()="CAD Import"]')
-    eso.cl('//button[text()="Update data"]')
-    eso.cl('//button[text()="Refresh with new data"]')
+    #eso.cl('//button[text()="CAD Import"]')
+    #eso.cl('//button[text()="Update data"]')
+    #eso.cl('//button[text()="Refresh with new data"]')
 
     eso.ssEms("incident.response.runTypeId", "911")
     eso.ssEms("incident.response.priorityId", "Emer")
@@ -332,7 +341,7 @@ while True:
         eso.sk('//input[@name="password"]', 'jevans2')
         eso.cl('//input[@name="agency"]')
         eso.sk('//input[@name="agency"]', 'tukwilafd')
-        eso.cl('//button[@class="btn login-button"]')
+        eso.cl('//log-in-form/form/button')
         sleep(1)
         eso.waitPageLoaded()
         eso.get("https://www.esosuite.net/ehr")
