@@ -1,0 +1,6 @@
+notes on parsing cura command log into usable shell cmd
+
+
+(echo '#!/bin/bash'; echo -n 'CuraEngine slice -o "$1.gcode" '; cat ~/tmp/cura.log2  | sed -e 's/[^"]*\]//' | sed -e 's/-l "0"/-l "$1"/' ) > ~/tmp/cura.sh
+
+

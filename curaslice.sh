@@ -1,0 +1,1 @@
+/home/jim/tmp/curaSlice-20220705-132048.sh
