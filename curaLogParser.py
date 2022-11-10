@@ -22,6 +22,7 @@ while True:
         if m:
             cmd += m.group(1) + "\n"
         if re.search(' -l "0" ', line):
+            cmd = cmd.replace('All settings:', '')
             cmd = cmd.replace(' -l "0" ', ' -l "$1" ')
             fname = outDir + datetime.now().strftime("/curaSlice-%Y%m%d-%H%M%S.sh")
             f = open(fname, "w")

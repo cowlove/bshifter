@@ -24,7 +24,7 @@ if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
     w.click('(//span[@class="os-document-display-name"])[1]') # First document in list
 
 w.waitPageLoaded()
-e = w.waitInteractable('(//span[@class="os-tab-name"])[1]')
+e = w.waitInteractable('(//span[contains(@class, "os-tab-name")])[1]')
 partStudio = e.text
 ver = 1
 for f in listdir(expanduser("~/Downloads/")):

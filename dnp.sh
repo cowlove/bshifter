@@ -1,8 +1,9 @@
 #!/bin/bash -x
-
+export LD_LIBRARY_PATH=~/opt/cura-5.2.1
 # Rough script to download latest file from onshape.com, slice it and print it 
+octoprint-cli connection connect
 octoprint-cli -v temp bed 60
-octoprint-cli -v temp extruder 200
+octoprint-cli -v temp extruder 210
 
 ./onshape.py
 # TODO onshape.py should return this filename 

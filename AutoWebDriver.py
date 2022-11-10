@@ -129,6 +129,7 @@ class AutoWebDriver:
 
 
     def waitInteractable(self, xpath, tmo=default_timeout):
+        print("waitInteractable() " + xpath)
         for n in range(1, 3):
             try:
                 e = WebDriverWait(self.driver, tmo).until(
