@@ -39,7 +39,7 @@ w.click('//element-name[@data-original-title="' + partStudio + '"]')
 w.rclick('//element-name[@data-original-title="' + partStudio + '"]')
 w.click('//span[text()="Export…"]')	
 w.keys('//input[@id="export-filename-input"]', "N%04d %s"  % (ver, partStudio))
-w.click('//button[text()="OK"]')
+w.click('//button[text()="Export"]')
 
 # Wait for download to complete.  Use stl_bbox to check for complete file             
 # stl_bbox from git clone https://github.com/AllwineDesigns/stl_cmd.git
