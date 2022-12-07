@@ -56,8 +56,8 @@ class MyDialog(simpledialog.Dialog):
         self.row = 0;
 
         (dummy, self.name) = self.addTextEntry(master, "FF Name", "evans")
-        (dummy, self.station) = self.addTextEntry(master, "Station", "52")
-        (dummy, self.zip) = self.addTextEntry(master, "Zip", "98188")
+        (dummy, self.station) = self.addTextEntry(master, "Station", "54")
+        (dummy, self.zip) = self.addTextEntry(master, "Zip", "98168")
         (self.crib1, self.pi) = self.addTextEntry(master, "Primary Impression", "alter")
         (self.crib2, self.ssc) = self.addTextEntry(master, "S&S Category", "cognit")
         (self.crib3, self.ssd) = self.addTextEntry(master, "S&S Detail", "intox")
