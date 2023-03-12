@@ -1,1 +1,1 @@
-/home/jim/tmp/curaSlice-20221031-145237.sh
+/home/jim/tmp/curaSlice-20221121-140036.sh

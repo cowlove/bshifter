@@ -23,11 +23,13 @@ while True:
             cmd += m.group(1) + "\n"
         if re.search(' -l "0" ', line):
             cmd = cmd.replace('All settings:', '')
-            cmd = cmd.replace(' -l "0" ', ' -l "$1" ')
+            cmd = cmd.replace(' -l "0" ', ' -l "$F" ')
             fname = outDir + datetime.now().strftime("/curaSlice-%Y%m%d-%H%M%S.sh")
             f = open(fname, "w")
             print('#!/bin/bash', file=f)
-            print('CuraEngine slice -o "$1.gcode" ', end='', file=f)
+            print('export LD_LIBRARY_PATH=~/opt/cura-5.2.1/', file=f)
+            print('F="${F:=$1}"', file=f)
+            print('CuraEngine slice -o "$F.gcode" ', end='', file=f)
             print(cmd, file=f)
             f.close()
             chmod(fname, 0o755)
