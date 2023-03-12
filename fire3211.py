@@ -35,6 +35,36 @@ class MyDialog(simpledialog.Dialog):
         return (e, sv)
 
 
+    def filter(self):
+        eso.cl('//section[@class="left"] ')
+        eso.cl('//span[text()="Incidents"]')
+        eso.cl('//button[text()="Filters"]')
+        eso.cl('//button[text()="Add Filter"]')
+        eso.cl('(//div[@class="field-container"])[6]')
+        eso.sk('//input[@type="text"]', "unit" + Keys.ENTER)
+        eso.cl('(//div[@class="field-container"])[7]')
+        eso.sk('//input[@type="text"]', "E354" + Keys.ENTER)
+        eso.cl('//div[@class="filterbutton"]')
+        eso.cl('//div[@class="filterbutton"]')
+    
+
+    def login(self):
+        if (not eso.exists('//button[@class="action-button hamburger-bg"]')) and (not eso.exists('//button[@class="more hamburger-bg"]')) and (not eso.exists('//button[@class="icons-hamburger"]')):
+            eso.get("https://www.esosuite.net/")
+            eso.waitPageLoaded()
+            eso.cl('//input[@name="username"]')
+            eso.sk('//input[@name="username"]', 'kf0559')
+            eso.cl('//input[@name="password"]')
+            eso.sk('//input[@name="password"]', 'tlatla53ESO1')
+            eso.cl('//input[@name="agency"]')
+            eso.sk('//input[@name="agency"]', 'kentfd')
+            eso.cl('//log-in-form/form/button')
+            sleep(1)
+            eso.waitPageLoaded()
+            eso.get("https://www.esosuite.net/ehr")
+        
+
+
     def setCrib(self): 
         s = self.cb['values'][self.cb.current()].split('/')
         
@@ -76,6 +106,9 @@ class MyDialog(simpledialog.Dialog):
         cb.grid(column=0, row   =self.row) 
         self.cb = cb
         Button(master, text="SET", command=self.setCrib).grid(column = 1, row=self.row)
+        self.row += 1
+        Button(master, text="LOGIN", command=self.login).grid(column = 1, row=self.row)
+        Button(master, text="FILTER", command=self.filter).grid(column = 2, row=self.row)
         self.setCrib()
         self.row += 1
 
@@ -170,11 +203,47 @@ def emsReport():
     eso.cl('//shelf-panel//button[text()="OK"]', tmo=.5) 
 
     ###################################################33
+    # SIGNATURES TAB tab
+    # Make signature array with output from http://ramkulkarni.com/blog/record-and-playback-drawing-in-html5-canvas-part-ii/ 
+    # and this: 
+    # tr '}' '\n'  | perl -e 'while(<>){if(/"x":(\d+),"y":(\d+)/ && $count++ % 5 == 0) { $x=$1-$lx;$y=$2-$ly; $lx=$1;$ly=$2; print "[$x,$y],"; }}'
+    # 
+
+    eso.cl('//li[@class="signatures signatures-bg"]')
+    sleep(1)
+    eso.cl('//div[text()="Provider Signatures"]')
+    if eso.exists('(//eso-signature)[1]//div[@class="signing-area signature signed-bg"]'):
+        print("ALREADY SIGNED")
+    else:
+        print("NOT SIGNED")
+        eso.ssEms("signatures.standardSignatures.providerSignatures.leadProviderId", d.name.get())
+        eso.cl('//eso-signature-pad//canvas')
+
+        canvas = eso.driver.find_element_by_xpath('//div[@class="signing-area-container"]')
+        #//eso-signature-pad//canvas')
+        drawing = ActionChains(eso.driver)\
+            .move_to_element_with_offset(canvas, 120, -482) \
+            .click_and_hold()
+        for p in (
+            [-20,-32],[-8,-51],[4,-53],[19,-8],[16,118],[-20,58],[-31,32],[-8,-2],[77,-95],[19,-16],[5,-3],[-6,16],        
+            ):
+            drawing = drawing.move_by_offset(p[0], p[1])
+        drawing.release()
+
+        drawing.perform()
+        eso.cl('//eso-signature-dialog//button[text()="OK"]') 
+    eso.cl('//shelf-panel//button[text()="OK"]') 
+
+    #exit()
+
+    ###################################################33
     # INCIDENT tab
     eso.cl('//li[@class="incident incident-bg"]')
      
-
- 
+    eso.cl('//button[text()="Sick Person"]', tmo=2)
+    eso.cl('//eso-yes-no[@class="ng-untouched ng-valid ng-dirty" and @name="incident.destination.requiredReportableCondition"]//button[@data-val="false"]', tmo=.5)
+    eso.cl('//eso-yes-no[@class="ng-untouched ng-valid ng-dirty" and @name="incident.destination.reviewRequested"]//button[@data-val="false"]', tmo=.5)
+  
     #eso.cl('//button[text()="CAD Import"]')
     #eso.cl('//button[text()="Update data"]')
     #eso.cl('//button[text()="Refresh with new data"]')
@@ -192,7 +261,7 @@ def emsReport():
         eso.ssEms("incident.disposition.transportDueToItemIDs", "Patient")
         eso.ssEms("incident.disposition.transferredToLocationTypeID", "Ground")
         eso.ssEms("incident.disposition.transferredToLocationID", "Tri")
-        eso.ssEms("incident.destination.predefinedAddress.predefinedLocationID", d.hospital.get())
+        #eso.ssEms("incident.destination.predefinedAddress.predefinedLocationID", d.hospital.get())
     else:
         # TODO: This stalls out, can't find "Other"
         eso.cl('//button[text()="Other"]')
@@ -210,7 +279,9 @@ def emsReport():
             eso.cl('//button[@class="btn icon-btn search-bg"]')
             eso.cl('//td[text()="' + d.zip.get() + '"]')
     
+    
 
+    
 #<button class="btn icon-btn search-bg" ng-class="{ searching: searching, 'search-bg': !isInternational, 'search-gray-bg': isInternational }" ng-click="search($event)" ng-disabled="isInternational"></button>
 
 #/html/body/emr-app/div/emr-app-body/main/incident-tab/emr-main-view/main-viewport/field-set[2]/eso-location/div[2]/eso-address/table[2]/tbody/tr[2]/td[2]/table/tbody/tr/td[2]/button
@@ -268,6 +339,7 @@ def emsReport():
     #ssEms("patient.demographics.ethnicityId", "Not")
     eso.ssEms("patient.demographics.genderId", ("Male" if d.male.get() else "Female"))
 
+
     ###################################################33
     # NARRATIVE tab
     eso.cl('//li[@class="narrative narrative-bg"]')
@@ -284,37 +356,31 @@ def emsReport():
         eso.cl('//shelf-panel//button[text()="OK"]', tmo=.5) 
 
     
+
     ###################################################33
-    # SIGNATURES TAB tab
-    # Make signature array with output from http://ramkulkarni.com/blog/record-and-playback-drawing-in-html5-canvas-part-ii/ 
-    # and this: 
-    # tr '}' '\n'  | perl -e 'while(<>){if(/"x":(\d+),"y":(\d+)/ && $count++ % 5 == 0) { $x=$1-$lx;$y=$2-$ly; $lx=$1;$ly=$2; print "[$x,$y],"; }}'
-    # 
+    # CONSUMABLES tab
+    eso.cl('//li[@class="billing billing-bg"]')
+    #if not eso.exists('//grid-cell[text()="<strong>None</strong>"]'):
+    if not eso.exists('//aside[@class="ellipsify"]'):
+        eso.cl('//button[text()="Add Consumables"]')
+        eso.cl('//div[text()="None"]')
+        eso.cl('//shelf-panel//button[text()="OK"]', tmo=.5) 
 
-    eso.cl('//li[@class="signatures signatures-bg"]')
     sleep(1)
-    eso.cl('//div[text()="Provider Signatures"]')
-    if eso.exists('//div[@class="signing-area signature signed-bg"]'):
-        print("ALREADY SIGNED")
-    else:
-        print("NOT SIGNED")
-        eso.ssEms("signatures.standardSignatures.providerSignatures.leadProviderId", d.name.get())
-        eso.cl('//eso-signature-pad//canvas')
+  
+    ###################################################33
+    # NARRATIVE tab
+    eso.cl('//li[@class="narrative narrative-bg"]')
+    sleep(1)
 
-        canvas = eso.driver.find_element_by_xpath('//div[@class="signing-area-container"]')
-        #//eso-signature-pad//canvas')
-        drawing = ActionChains(eso.driver)\
-            .move_to_element_with_offset(canvas, 120, -482) \
-            .click_and_hold()
-        for p in (
-            [-20,-32],[-8,-51],[4,-53],[19,-8],[16,118],[-20,58],[-31,32],[-8,-2],[77,-95],[19,-16],[5,-3],[-6,16],        
-            ):
-            drawing = drawing.move_by_offset(p[0], p[1])
-        drawing.release()
+    ###################################################33
+    # FORMS tab
+    eso.cl('//li[@class="forms forms-bg"]')
+    sleep(1)
+    eso.cl('//button[@data-id="11857"]')
+    eso.cl('//button[@class="btn radio-btn" and @data-val="false"]', tmo=2)
+    eso.cl('//shelf-panel//button[text()="OK"]', tmo=.5) 
 
-        drawing.perform()
-        eso.cl('//eso-signature-dialog//button[text()="OK"]') 
-    eso.cl('//shelf-panel//button[text()="OK"]') 
 
     ###################################################33
     # VALIDATE button Experiental stuff messing with Validate button
@@ -333,19 +399,9 @@ eso.driver.set_window_size("1200", "800")
 #exit()
 
 while True:
-    if (not eso.exists('//button[@class="action-button hamburger-bg"]')) and (not eso.exists('//button[@class="more hamburger-bg"]')) and (not eso.exists('//button[@class="icons-hamburger"]')):
-        eso.get("https://www.esosuite.net/")
-        eso.waitPageLoaded()
-        eso.cl('//input[@name="username"]')
-        eso.sk('//input[@name="username"]', 'jevans')
-        eso.cl('//input[@name="password"]')
-        eso.sk('//input[@name="password"]', 'jevans2')
-        eso.cl('//input[@name="agency"]')
-        eso.sk('//input[@name="agency"]', 'tukwilafd')
-        eso.cl('//log-in-form/form/button')
-        sleep(1)
-        eso.waitPageLoaded()
-        eso.get("https://www.esosuite.net/ehr")
+
+    #eso.cl('//svg[@class="eso-company-logo"]')
+
 
     root = Tk()
     root.withdraw()
