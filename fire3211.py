@@ -156,7 +156,8 @@ def fireReport():
     eso.cl('//eso-address-summary[@field-label="\'Address\'"]')
     eso.sk('//eso-zip-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
         d.zip.get() + "\n"])
-    eso.cl('//shelf-panel//button[text()="OK"]')
+    #eso.cl('//shelf-panel//button[text()="Close ✖"]')
+    eso.cl('//button[text()="Close ✖"]')
 
 
     #eso.cl('//eso-date[@field-ref="OFFICERINCHARGEDATE"]')
@@ -167,8 +168,8 @@ def fireReport():
     eso.cl('//eso-date[@field-ref="REPORTWRITERDATE"]')
     eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
         date + "\n"])
-    eso.cl('//div[@class="filterbutton"]//button[text()="OK"]')
-
+    eso.cl('//button[text()="Close ✖"]')
+    
     if (d.callType.get() == "3211"):
         eso.sk('//eso-text[@field-ref="NARRATIVEREMARKS"]//textarea[@type="text"]', "See EMS report.\n")
     sleep(1)
