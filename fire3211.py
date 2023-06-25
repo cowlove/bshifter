@@ -117,6 +117,10 @@ class MyDialog(simpledialog.Dialog):
     def apply(self):
         self.okPressed = True
 
+def clickOK():
+    eso.cl('//button[text()="Close ✖"]', 1)
+    eso.cl('//button[text()="OK"]', 1)
+    eso.cl('//button[text()="Ok"]', 1)
 
 def fireReport():
     global d
@@ -156,8 +160,7 @@ def fireReport():
     eso.cl('//eso-address-summary[@field-label="\'Address\'"]')
     eso.sk('//eso-zip-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
         d.zip.get() + "\n"])
-    #eso.cl('//shelf-panel//button[text()="Close ✖"]')
-    eso.cl('//button[text()="Close ✖"]')
+    clickOK()
 
 
     #eso.cl('//eso-date[@field-ref="OFFICERINCHARGEDATE"]')
@@ -168,7 +171,7 @@ def fireReport():
     eso.cl('//eso-date[@field-ref="REPORTWRITERDATE"]')
     eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
         date + "\n"])
-    eso.cl('//button[text()="Close ✖"]')
+    clickOK()
     
     if (d.callType.get() == "3211"):
         eso.sk('//eso-text[@field-ref="NARRATIVEREMARKS"]//textarea[@type="text"]', "See EMS report.\n")
@@ -256,7 +259,16 @@ def emsReport():
     eso.ssEms("incident.response.respondingFromZoneID", "In")
     eso.ssEms("incident.response.requestedByItemID", "Patient")
 
-    if (len(d.hospital.get()) > 0): 
+    eso.ssEms("incident.disposition.unitDispositionItemID", "Made")
+    eso.ssEms("incident.disposition.patientEvaluationCareDispositionItemID", "Care Prov")
+    eso.ssEms("incident.disposition.crewDispositionItemID", "Cont")
+    eso.ssEms("incident.disposition.transportDispositionItemID", "Another EMS")
+    eso.ssEms("incident.disposition.transferredToLocationTypeID", "Ground")
+
+
+
+
+    if (0 and len(d.hospital.get()) > 0): 
         eso.ssEms("incident.response.dispositionItemID", "Pt Care T")
         eso.ssEms("incident.disposition.dispositionItemID", "Patient Treated, Trans")
         eso.ssEms("incident.disposition.transportMethodID", "Ambulance")
