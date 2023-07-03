@@ -38,7 +38,7 @@ class MyDialog(simpledialog.Dialog):
     def filter(self):
         eso.cl('//section[@class="left"] ')
         eso.cl('//span[text()="Incidents"]')
-        eso.cl('//button[text()="Filters"]')
+        eso.cl('//button[@id="gridFilterBtn"]')
         eso.cl('//button[text()="Add Filter"]')
         eso.cl('(//div[@class="field-container"])[6]')
         eso.sk('//input[@type="text"]', "unit" + Keys.ENTER)
@@ -128,6 +128,11 @@ def fireReport():
     global driver 
     eso.cl('//shelf-panel//button[text()="OK"]', tmo=1) 
     eso.cl('//label[text()="Basic"]')
+
+    #eso.ss("AIDGIVENORRECEIVEDID", "2") # 2 auto aid given, 4 auto aid received, N none
+    #eso.ss("AIDINGAGENCIESMULTI", "bur")
+    #exit()
+
 
     # simple ones
     eso.ss("STATIONID", d.station.get())

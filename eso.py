@@ -12,7 +12,7 @@ import AutoWebDriver
 
 class Eso(AutoWebDriver.AutoWebDriver):
     sleep_granularity = .3
-    default_timeout = 10.0
+    default_timeout = 2
     sleep_delay = .4
     driver = False
 
@@ -149,9 +149,11 @@ class Eso(AutoWebDriver.AutoWebDriver):
                 'translate(text(), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"),' +
                 'translate("' + text + '", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"))]', tmo)
             self.cl('//eso-single-select-shelf//button[text()="OK"]', tmo=.5) 
+            self.cl('//eso-single-select-shelf//button[text()="Ok"]', tmo=.5) 
         else: 
             self.cl('//eso-multi-select-panel//li//div//mark[contains(' + 
                 'translate(text(), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"),' +
                 'translate("' + text + '", "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789abcdefghijklmnopqrstuvwxyz"))]', tmo)
+            self.cl('//eso-multi-select-shelf//button[text()="Ok"]', tmo=.5) 
             self.cl('//eso-multi-select-shelf//button[text()="OK"]', tmo=.5) 
 
