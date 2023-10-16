@@ -8,7 +8,8 @@ from os.path import isfile, join, expanduser
 import re
 
 w = AutoWebDriver.AutoWebDriver()
-w.click('//a[@class="alert-link os-message-bubble-link"]', .1)
+if (w.exists('//a[@class="alert-link os-message-bubble-link"]')):
+    w.click('//a[@class="alert-link os-message-bubble-link"]', 2)
 
 if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
     # Can't see partStudio tab, try logging in and reselecting first document  
@@ -35,8 +36,8 @@ fname = expanduser("~/Downloads/N%04d %s.stl" % (ver, partStudio))
 print("Downloading Part Studio '" +  partStudio + "' as file '" + fname + "'")
 
 
-w.click('//element-name[@data-original-title="' + partStudio + '"]')
-w.rclick('//element-name[@data-original-title="' + partStudio + '"]')
+w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
+w.rclick('//element-name[@data-bs-original-title="' + partStudio + '"]')
 w.click('//span[text()="Export…"]')	
 w.keys('//input[@id="export-filename-input"]', "N%04d %s"  % (ver, partStudio))
 w.click('//button[text()="Export"]')
