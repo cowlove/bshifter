@@ -5,8 +5,8 @@ ADHESION=none
 export LD_LIBRARY_PATH=~/opt/cura-5.2.1
 
 octoprint-cli connection connect
-octoprint-cli -v temp bed 90 
-octoprint-cli -v temp extruder 235
+octoprint-cli -v temp bed 60 
+octoprint-cli -v temp extruder 210
 
 ./onshape.py
 # TODO onshape.py should return this filename 
@@ -16,9 +16,10 @@ FILEC="$FILE".centered.stl
 stl_binary "$FILE" "$FILE".bin
 stl_center "$FILE".bin "$FILEC"
 
-CMD=`sed 's/adhesion_type="brim"/adhesion_type="'${ADHESION}'"/g' curaslice.sh`
+sed 's/adhesion_type="brim"/adhesion_type="'${ADHESION}'"/g' curaslice.sh > go.sh
+chmod 755 go.sh
 
-./curaslice.sh "$FILEC"  
+./go.sh "$FILEC"  
 
 octoprint-cli files upload "$FILEC.gcode"
 octoprint-cli print select "`basename \"$FILEC.gcode"`"

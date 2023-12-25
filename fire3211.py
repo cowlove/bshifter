@@ -263,7 +263,7 @@ def emsReport():
         eso.ssEms("signatures.standardSignatures.providerSignatures.leadProviderId", d.name.get())
         eso.cl('//eso-signature-pad//canvas')
 
-        canvas = eso.driver.find_element_by_xpath('//div[@class="signing-area-container"]')
+        canvas = eso.driver.find_element("xpath", '//div[@class="signing-area-container"]')
         #//eso-signature-pad//canvas')
         drawing = ActionChains(eso.driver)\
             .move_to_element_with_offset(canvas, 120, -482) \
@@ -369,7 +369,7 @@ def emsReport():
 
     # Handle missing "at-patient" time 
     if (eso.exists('//span[text()="At Patient"]/../span[text()="- -"]')):
-        e = eso.driver.find_element_by_xpath('(//span[text()="On Scene"]/../span)[2]')
+        e = eso.driver.find_element("xpath", '(//span[text()="On Scene"]/../span)[2]')
         # Add 3 minutes to "On Scene" time 
         try: 
             t = e.text.split(':')
