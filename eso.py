@@ -39,7 +39,7 @@ class Eso(AutoWebDriver.AutoWebDriver):
         print("Clicking on for " + xpath)
         for n in range(int(tmo/self.sleep_granularity)):
             try:
-                e = self.driver.find_element_by_xpath(xpath)
+                e = self.driver.find_element("xpath", xpath)
                 e.click()
                 return
             except Exception as e:
@@ -75,7 +75,7 @@ class Eso(AutoWebDriver.AutoWebDriver):
         sleep(self.sleep_delay)    
         for n in range(int(tmo/self.sleep_granularity)):
             try:
-                e = self.driver.find_element_by_xpath(xpath)
+                e = self.driver.find_element("xpath", xpath)
                 e.clear()
                 #print(keys)
                 e.send_keys(keys)
@@ -86,13 +86,13 @@ class Eso(AutoWebDriver.AutoWebDriver):
                 sleep(self.sleep_granularity)
 
     def old_exists(self, xpath):
-        return len(self.driver.find_elements_by_xpath(xpath)) > 0 
+        return len(self.driver.find_elements("xpath", xpath)) > 0 
 
     def old_waitfor(self, xpath, tmo=default_timeout):
         print("Waiting for " + xpath)
         for n in range(int(tmo/self.sleep_granularity)):
             try:
-                e = self.driver.find_element_by_xpath(xpath)
+                e = self.driver.find_element("xpath", xpath)
                 return True
             except Exception as e:
                 print(e)

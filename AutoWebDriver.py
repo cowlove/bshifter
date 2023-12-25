@@ -16,9 +16,9 @@ import os
 from selenium.webdriver.firefox.options import Options
 opts = Options()
 
-#profile = webdriver.FirefoxProfile()
+profile = webdriver.FirefoxProfile()
 #profile.set_preference("browser.download.folderList", 2)
-
+profile.set_preference("browser.download.alwaysOpenPanel", False)
 from time import sleep
 #print(profile.default_preferences)
 from sys import argv
@@ -72,7 +72,7 @@ class AutoWebDriver:
 
     def __init__(self):
         self.opendriver()
-        self.driver.set_window_size("600", "400")
+        self.driver.set_window_size("1200", "1200")
 
     def create_driver_session(self, session_id, executor_url):
         from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
