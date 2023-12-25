@@ -93,9 +93,10 @@ class MyDialog(simpledialog.Dialog):
         (self.crib2, self.ssc) = self.addTextEntry(master, "S&S Category", "cognit")
         (self.crib3, self.ssd) = self.addTextEntry(master, "S&S Detail", "intox")
         (dummy, self.hospital) = self.addTextEntry(master, "Hospital", "vall")
-        (dummy, self.callType) = self.addTextEntry(master, "Call Type", "3211")
+        (dummy, self.callType) = self.addTextEntry(master, "Call Type (3211,743,7140)", "3211")
         self.male = self.addCheckbox(master, 'Male', 1)
         self.firstUnit = self.addCheckbox(master, 'First Unit', 1)
+        (dummy, self.autoAid) = self.addTextEntry(master, "Automatic Aid (n,2=rec,4=given)", "n")
         
         
         Label(master).grid(column = 0, row=self.row)    
@@ -142,7 +143,7 @@ def fireReport():
         eso.ss("ACTIONTAKEN1", "86)")
     eso.ss("INCIDENTTYPEID", d.callType.get());
 
-    eso.ss("AIDGIVENORRECEIVEDID", "n")
+    eso.ss("AIDGIVENORRECEIVEDID", d.autoAid.get())
     eso.ss("LOCATIONTYPEID", "address")
     eso.ss("PROPERTYUSEID", "000")
     eso.ss("SHIFTID", "A")
