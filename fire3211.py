@@ -146,7 +146,7 @@ def fireReport():
     eso.ss("AIDGIVENORRECEIVEDID", d.autoAid.get())
     eso.ss("LOCATIONTYPEID", "address")
     eso.ss("PROPERTYUSEID", "000")
-    eso.ss("SHIFTID", "A")
+    #eso.ss("SHIFTID", "A")
     #eso.ss("OFFICERINCHARGEAGENCYPERSONID", d.name.get())
     #eso.ss("officerInCharge.personnelLabel", d.name.get())
     eso.cl('//eso-yes-no[@field-ref="OFFICERINCHARGESAMEASREPORTWRITER"]//button[@data-val="true"]')
