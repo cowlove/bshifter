@@ -35,6 +35,17 @@ class MyDialog(simpledialog.Dialog):
         return (e, sv)
 
 
+    def addOptionMenu(self, master, prompt, options):
+        sv = StringVar(root, value=options[0])
+        v = StringVar(master);
+        v.set(options[0])
+        Label(master, text=prompt).grid(sticky="w", column = 0, row = self.row)
+        e = OptionMenu(master, v, options )
+        e.grid(sticky="w", column = 1, row = self.row)
+        self.row += 1
+        return (e, sv)
+
+
     def filter(self):
         eso.cl('//section[@class="left"] ')
         eso.cl('//span[text()="Incidents"]')
@@ -66,8 +77,7 @@ class MyDialog(simpledialog.Dialog):
 
 
     def setCrib(self): 
-        s = self.cb['values'][self.cb.current()].split('/')
-        
+        s = self.ssComboBox['values'][self.ssComboBox.current()].split('/')
         self.crib1.delete(0, END)
         self.crib1.insert(0, s[0])
         self.crib1.setvar()
@@ -96,21 +106,31 @@ class MyDialog(simpledialog.Dialog):
         (dummy, self.callType) = self.addTextEntry(master, "Call Type (3211,743,7140)", "3211")
         self.male = self.addCheckbox(master, 'Male', 1)
         self.firstUnit = self.addCheckbox(master, 'First Unit', 1)
-        (dummy, self.autoAid) = self.addTextEntry(master, "Automatic Aid (n,2=rec,4=given)", "n")
-        
+        #(dummy, self.autoAid) = self.addTextEntry(master, "Automatic Aid (n,2=rec,4=given)", "n")
         
         Label(master).grid(column = 0, row=self.row)    
         self.row += 1
 
+        self.mutAid = StringVar(root)
+        Label(master, text="Automatic Aid").grid(sticky="w", column = 0, row = self.row)
+        cb = Combobox(master, textvariable=self.mutAid)
+        cb['values'] = ('No Automatic Aid', 'AA from M4', 'AA from Burien', 'AA to Burien')
+        cb.current(0)
+        cb.grid(column=1, row=self.row) 
+        #self.maComboBox = cb
+        self.row += 1
+
+        Label(master, text="Signs&Symptoms").grid(sticky="w", column = 0, row = self.row)
         cb = Combobox(master)
         cb['values'] = ('alt/cog/intox', 'face/inj/face', 'no complaint/no/no', 'shortness/resp/short')
         cb.current(0)
-        cb.grid(column=0, row   =self.row) 
-        self.cb = cb
-        Button(master, text="SET", command=self.setCrib).grid(column = 1, row=self.row)
+        cb.grid(column=1, row=self.row) 
+        Button(master, text="SET", command=self.setCrib).grid(column = 2, row=self.row)
+        self.ssComboBox = cb
         self.row += 1
+
         Button(master, text="LOGIN", command=self.login).grid(column = 1, row=self.row)
-        Button(master, text="FILTER", command=self.filter).grid(column = 2, row=self.row)
+        #Button(master, text="FILTER", command=self.filter).grid(column = 2, row=self.row)
         self.setCrib()
         self.row += 1
 
@@ -143,7 +163,20 @@ def fireReport():
         eso.ss("ACTIONTAKEN1", "86)")
     eso.ss("INCIDENTTYPEID", d.callType.get());
 
-    eso.ss("AIDGIVENORRECEIVEDID", d.autoAid.get())
+    #eso.ss("AIDGIVENORRECEIVEDID", d.autoAid.get())
+    if (d.mutAid.get() == 1 or d.mutAid.get() == 2):
+        eso.ss("AIDGIVENORRECEIVEDID", "2")
+    elif (d.mutAid.get() == 3): 
+        eso.ss("AIDGIVENORRECEIVEDID", "4")
+    else:
+        eso.ss("AIDGIVENORRECEIVEDID", "N")
+
+
+    if (d.mutAid.get() == "X"):
+        eso.ss("AIDINGAGENCIESMULTI", "MEDIT")
+    elif (d.mutAid.get() == 2 or d.mutAid.get() == 3):
+        eso.ss("AIDINGAGENCIESMULTI", "BURIEN")
+
     eso.ss("LOCATIONTYPEID", "address")
     eso.ss("PROPERTYUSEID", "000")
     #eso.ss("SHIFTID", "A")
