@@ -159,7 +159,7 @@ def fireReport():
     eso.ss("STATIONID", d.station.get())
     if (d.callType.get() == "3211"):
         eso.ss("ACTIONTAKEN1", "32")
-    else: 
+    elif (d.callType.get() != "611"): 
         eso.ss("ACTIONTAKEN1", "86)")
     eso.ss("INCIDENTTYPEID", d.callType.get());
 
@@ -179,7 +179,7 @@ def fireReport():
 
     eso.ss("LOCATIONTYPEID", "address")
     eso.ss("PROPERTYUSEID", "000")
-    eso.ss("SHIFTID", "A")
+    #eso.ss("SHIFTID", "A")
     #eso.ss("OFFICERINCHARGEAGENCYPERSONID", d.name.get())
     #eso.ss("officerInCharge.personnelLabel", d.name.get())
     eso.cl('//eso-yes-no[@field-ref="OFFICERINCHARGESAMEASREPORTWRITER"]//button[@data-val="true"]')
