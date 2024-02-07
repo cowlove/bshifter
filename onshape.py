@@ -21,7 +21,7 @@ if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
     w.click('//button[@id="show-all"]')
     w.keys('//input[@id="about-config-search"]', "alwaysOpenPanel")
     #w.click('//button[@id="about-config-pref-toggle-button"]')
-    w.click('/html/body/table/tr[305]/td[2]/button')
+    w.click('/html/body/table/tr[303]/td[2]/button')
 
     # Can't see partStudio tab, try logging in and reselecting first document  
     w.get("https://cad.onshape.com/signin")
@@ -58,6 +58,8 @@ w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
 w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
 w.rclick('//element-name[@data-bs-original-title="' + partStudio + '"]')
 w.click('//span[text()="Export…"]')	
+w.click('//input[@id="export-filename-input"]')	
+w.clear('//input[@id="export-filename-input"]')	
 w.keys('//input[@id="export-filename-input"]', "N%04d %s"  % (ver, partStudio))
 w.click('//button[text()="Export"]')
 

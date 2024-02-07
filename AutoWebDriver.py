@@ -149,6 +149,12 @@ class AutoWebDriver:
         e = self.waitInteractable(xpath, tmo)
         e.send_keys(keys)
 
+    def clear(self, xpath, tmo=default_timeout):
+        print("Clear " + xpath)
+        e = self.waitfor(xpath, tmo)
+        e = self.waitInteractable(xpath, tmo)
+        e.clear()
+
     def click(self, xpath, tmo=default_timeout):
         print("Clicking " + xpath)
         e = self.waitfor(xpath, tmo)
