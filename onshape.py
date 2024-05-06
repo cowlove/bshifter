@@ -21,7 +21,13 @@ if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
     w.click('//button[@id="show-all"]')
     w.keys('//input[@id="about-config-search"]', "alwaysOpenPanel")
     #w.click('//button[@id="about-config-pref-toggle-button"]')
-    w.click('/html/body/table/tr[303]/td[2]/button')
+    w.waitPageLoaded()
+    attempts = [311,] + list(range(300,315))
+        
+    for n in attempts:
+        if w.waitInteractable('/html/body/table/tr[%d]/td[2]/button' % n, 1) != False:
+            w.click('/html/body/table/tr[%d]/td[2]/button' % n)
+            break
 
     # Can't see partStudio tab, try logging in and reselecting first document  
     w.get("https://cad.onshape.com/signin")
@@ -73,5 +79,7 @@ while True:
         print("File complete, success")
         break
 
+w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
+w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
 w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
         

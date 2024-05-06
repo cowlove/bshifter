@@ -1,12 +1,14 @@
 #!/bin/bash -x
 # Rough script to download latest file from onshape.com, slice it and print it 
 ADHESION=none
-#ADHESION=brim
+ADHESION=brim
 export LD_LIBRARY_PATH=~/opt/cura-5.2.1
 
 octoprint-cli connection connect
-octoprint-cli -v temp bed 60 
-octoprint-cli -v temp extruder 210
+octoprint-cli connection connect
+octoprint-cli connection connect
+octoprint-cli -v temp bed 50 
+octoprint-cli -v temp extruder 200
 
 ./onshape.py
 # TODO onshape.py should return this filename 
