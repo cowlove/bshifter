@@ -14,20 +14,28 @@ if (w.exists('//a[@class="alert-link os-message-bubble-link"]')):
     w.click('//a[@class="alert-link os-message-bubble-link"]', 2)
 
 
-
-if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
+def TurnOffDownloadDialog():
     w.get("about:config")
     w.click('//button[@id="warningButton"]')
     w.click('//button[@id="show-all"]')
     w.keys('//input[@id="about-config-search"]', "alwaysOpenPanel")
     #w.click('//button[@id="about-config-pref-toggle-button"]')
     w.waitPageLoaded()
-    attempts = [311,] + list(range(300,315))
+    attempts = [300,] + list(range(200,450))
         
     for n in attempts:
-        if w.waitInteractable('/html/body/table/tr[%d]/td[2]/button' % n, 1) != False:
-            w.click('/html/body/table/tr[%d]/td[2]/button' % n)
+        e = w.driver.find_element(By.XPATH, '/html/body/table/tr[%d]/th/span' % n)
+        if (e.is_displayed()):
+            e = w.driver.find_element(By.XPATH, '/html/body/table/tr[%d]/td[1]/span/span' % n)
+            if e.text == "true":
+                if w.waitInteractable('/html/body/table/tr[%d]/td[2]/button' % n, 1) != False:
+                    w.click('/html/body/table/tr[%d]/td[2]/button' % n)
             break
+
+
+
+if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
+    TurnOffDownloadDialog()
 
     # Can't see partStudio tab, try logging in and reselecting first document  
     w.get("https://cad.onshape.com/signin")
@@ -46,7 +54,7 @@ e = w.waitInteractable('(//span[contains(@class, "os-tab-name")])[1]')
 partStudio = e.text
 ver = 1
 for f in listdir(expanduser("~/Downloads/")):
-    m = re.match("N(\d+) " + partStudio + ".stl", f)
+    m = re.match("N(\\d+) " + partStudio + ".stl", f)
     if (m):
         ver = max(ver, int(m.group(1)) + 1)
 fname = expanduser("~/Downloads/N%04d %s.stl" % (ver, partStudio))
@@ -73,13 +81,13 @@ w.click('//button[text()="Export"]')
 # stl_bbox from git clone https://github.com/AllwineDesigns/stl_cmd.git
 while True:
     print ("Checking on download file '" + fname + "'...")
-    time.sleep(2)
+    time.sleep(1)
     completedProc = subprocess.run(('stl_bbox', fname))
     if completedProc.returncode == 0:
-        print("File complete, success")
+        print("File '" + fname + "' complete, success!")
         break
 
-w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
-w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
-w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
+#w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
+#w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
+#w.click('//element-name[@data-bs-original-title="' + partStudio + '"]')
         
