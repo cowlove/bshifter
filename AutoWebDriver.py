@@ -24,6 +24,7 @@ import re
 import traceback
 
 
+
 class EverLastingProcess(Process):
     def join(self, *args, **kwargs):
         pass
@@ -70,6 +71,25 @@ class AutoWebDriver:
     idFile = "/tmp/selenium." + os.path.basename(argv[0])
     startedServer = False
     default_timeout = 30
+
+
+    def disableDownloadDialog():
+        get("about:config")
+        click('//button[@id="warningButton"]')
+        click('//button[@id="show-all"]')
+        keys('//input[@id="about-config-search"]', "alwaysOpenPanel")
+        click('//button[@id="about-config-pref-toggle-button"]')
+        waitPageLoaded()
+        attempts = [300,] + list(range(200,450))
+			
+        for n in attempts:
+            e = driver.find_element(By.XPATH, '/html/body/table/tr[%d]/th/span' % n)
+            if (e.is_displayed()):
+                e = driver.find_element(By.XPATH, '/html/body/table/tr[%d]/td[1]/span/span' % n)
+                if e.text == "true":
+                    if waitInteractable('/html/body/table/tr[%d]/td[2]/button' % n, 1) != False:
+                        click('/html/body/table/tr[%d]/td[2]/button' % n)
+                break
 
     def get(self, url):
         self.driver.get(url)
