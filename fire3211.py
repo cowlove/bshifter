@@ -8,9 +8,12 @@ from datetime import date
 from tkinter import *
 from tkinter import simpledialog
 from eso import Eso
-
-date=date.today().strftime("%m%d%Y")
 eso = Eso()
+
+
+defaultStation = "54"
+defaultUnit = "E354"
+defaultZip = "98168 "
 
 class MyDialog(simpledialog.Dialog):
     def __init__(self, master):
@@ -95,10 +98,11 @@ class MyDialog(simpledialog.Dialog):
         #self.entries = Frame(master).pack()
         self.row = 0;
 
+
         (dummy, self.name) = self.addTextEntry(master, "FF Name", "evans")
-        (dummy, self.station) = self.addTextEntry(master, "Station", "54")
-        (dummy, self.unit) = self.addTextEntry(master, "Unit", "E354")
-        (dummy, self.zip) = self.addTextEntry(master, "Zip", "98168	")
+        (dummy, self.station) = self.addTextEntry(master, "Station", defaultStation)
+        (dummy, self.unit) = self.addTextEntry(master, "Unit", defaultUnit)
+        (dummy, self.zip) = self.addTextEntry(master, "Zip", defaultZip)
         (self.crib1, self.pi) = self.addTextEntry(master, "Primary Impression", "alter")
         (self.crib2, self.ssc) = self.addTextEntry(master, "S&S Category", "cognit")
         (self.crib3, self.ssd) = self.addTextEntry(master, "S&S Detail", "intox")
@@ -145,15 +149,19 @@ def clickOK():
 
 def fireReport():
     global d
-    global date
     global driver 
+    today=date.today().strftime("%m%d%Y")
+
+    defaultStation = d.station.get()
+    defaultUnit = d.unit.get()
+    defaultZip = d.zip.get()
+	
     eso.cl('//shelf-panel//button[text()="OK"]', tmo=1) 
     eso.cl('//label[text()="Basic"]')
 
     #eso.ss("AIDGIVENORRECEIVEDID", "2") # 2 auto aid given, 4 auto aid received, N none
     #eso.ss("AIDINGAGENCIESMULTI", "bur")
     #exit()
-
 
     # simple ones
     eso.ss("STATIONID", d.station.get())
@@ -170,7 +178,6 @@ def fireReport():
         eso.ss("AIDGIVENORRECEIVEDID", "4")
     else:
         eso.ss("AIDGIVENORRECEIVEDID", "N")
-
 
     if (d.mutAid.get() == "X"):
         eso.ss("AIDINGAGENCIESMULTI", "MEDIT")
@@ -209,7 +216,7 @@ def fireReport():
 
     eso.cl('//eso-date[@field-ref="REPORTWRITERDATE"]')
     eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
-        date + "\n"])
+        today + "\n"])
     clickOK()
     
     if (d.callType.get() == "3211"):
@@ -239,7 +246,6 @@ def fireReport():
 
 def emsReport():
     global d
-    global date
     global driver
  
     # Click out of any shelf trays that happen to be up 
