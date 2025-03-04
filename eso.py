@@ -69,6 +69,17 @@ class Eso(AutoWebDriver.AutoWebDriver):
                 print(e) 
                 sleep(self.sleep_granularity)
 
+    def getValue(self, xpath, tmo = default_timeout):
+        for n in range(int(tmo/self.sleep_granularity)):
+            try: 
+                e = self.waitInteractable(xpath)
+                return e.get_attribute("value")
+                return
+            except Exception as e:
+                print(e) 
+                sleep(self.sleep_granularity)
+        return None
+
 
     def old_sk(self, xpath, keys, tmo = default_timeout):
   
@@ -100,7 +111,7 @@ class Eso(AutoWebDriver.AutoWebDriver):
         return False
 
     # single-select tweaked for EMS page, with horrible translate() hack for case insensitivity
-    def ssEms(self, id, text, tmo=default_timeout):
+    def ssEms(self, id, text, casei=True, tmo=default_timeout):
         print("Checking single-select '" + id + "' => '" + text + "'")
         already = True
 
@@ -126,14 +137,25 @@ class Eso(AutoWebDriver.AutoWebDriver):
             self.sk('//input[@ng-model="searchString"]', text, tmo)
             #sleep(1)
             if (self.exists("//eso-single-select-panel")): 
-                self.cl('//eso-single-select-panel//li//div//mark[contains(' + 
-                    'translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"),' +
-                    'translate("' + text + '", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"))]', tmo)
+                if casei:
+                    self.cl('//eso-single-select-panel//li//div//mark[contains(' + 
+                        'translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"),' +
+                        'translate("' + text + '", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"))]', tmo)
+                else:
+                    self.cl('//eso-single-select-panel//li//div//mark[contains(' + 
+                        'text(),"' + text + '")]', tmo)
+
                 self.cl('//eso-single-select-shelf//button[text()="OK"]', tmo=.5) 
             else: 
-                self.cl('//eso-multi-select-panel//li//div//mark[contains(' + 
-                    'translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"),' +
-                    'translate("' + text + '", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"))]', tmo)
+                if casei:
+                    self.cl('//eso-multi-select-panel//li//div//mark[contains(' + 
+                        'translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"),' +
+                        'translate("' + text + '", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"))]', tmo)
+                else:
+                    self.cl('//eso-multi-select-panel//li//div//mark[contains(' + 
+                        'text(),"' + text + '")]', tmo)
+
+
                 self.cl('//eso-multi-select-shelf//button[text()="OK"]', tmo=.5) 
 
             

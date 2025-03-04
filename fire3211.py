@@ -154,7 +154,13 @@ def fireReport():
     #eso.ss("AIDINGAGENCIESMULTI", "bur")
     #exit()
 
+    if int(eso.getValue('//eso-number-input[@field-ref="EMSAPPARATUS"]//input')) > 0:
+        eso.sk('//eso-number-input[@field-ref="EMSPERSONNEL"]//input', "2\n")
 
+    if int(eso.getValue('//eso-number-input[@field-ref="SUPPRESSIONPERSONNEL"]//input')) == 0:
+        eso.sk('//eso-number-input[@field-ref="SUPPRESSIONPERSONNEL"]//input', "3\n")
+
+    
     # simple ones
     eso.ss("STATIONID", d.station.get())
     if (d.callType.get() == "3211"):
@@ -162,15 +168,16 @@ def fireReport():
     elif (d.callType.get() != "611"): 
         eso.ss("ACTIONTAKEN1", "86)")
     eso.ss("INCIDENTTYPEID", d.callType.get());
+    eso.ss("TEMPORARYRESIDENTINVOLVEMENTMULTISELECT", "None")
 
     #eso.ss("AIDGIVENORRECEIVEDID", d.autoAid.get())
-    if (d.mutAid.get() == 1 or d.mutAid.get() == 2):
+    # 1 = AA from M4, 2 = AA from KC2, 3 = AA to KC2 
+    if (d.mutAid.get() == 1 or d.mutAid.get() == 2): 
         eso.ss("AIDGIVENORRECEIVEDID", "2")
     elif (d.mutAid.get() == 3): 
         eso.ss("AIDGIVENORRECEIVEDID", "4")
     else:
         eso.ss("AIDGIVENORRECEIVEDID", "N")
-
 
     if (d.mutAid.get() == "X"):
         eso.ss("AIDINGAGENCIESMULTI", "MEDIT")
@@ -201,7 +208,6 @@ def fireReport():
         d.zip.get() + "\n"])
     clickOK()
 
-
     #eso.cl('//eso-date[@field-ref="OFFICERINCHARGEDATE"]')
     #eso.sk('//eso-masked-input//input', [Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE,Keys.BACK_SPACE, 
     #    date + "\n"])
@@ -214,6 +220,8 @@ def fireReport():
     
     if (d.callType.get() == "3211"):
         eso.sk('//eso-text[@field-ref="NARRATIVEREMARKS"]//textarea[@type="text"]', "See EMS report.\n")
+    if (d.callType.get() == "3112"):
+        eso.sk('//eso-text[@field-ref="NARRATIVEREMARKS"]//textarea[@type="text"]', "EMS call handled by outside agency with no response by PSRFA.\n")
     sleep(1)
     eso.cl('//label[text()="Basic"]')
 
@@ -245,6 +253,14 @@ def emsReport():
     # Click out of any shelf trays that happen to be up 
     eso.cl('//shelf-panel//button[text()="OK"]', tmo=.5) 
     eso.cl('//shelf-panel//button[text()="OK"]', tmo=.5) 
+
+    ###################################################33
+    # PATIENT tab
+    eso.cl('//li[@class="patient patient-bg"]')
+    sleep(1)
+    #ssEms("patient.demographics.ethnicityId", "Not")
+    #eso.ssEms("patient.demographics.genderId", ("Male" if d.male.get() else "Female"))  # TODO - broken, selects trans LOL
+    eso.ssEms("patient.contact.residentStatusId", "Housed", casei=False)
 
     ###################################################33
     # SIGNATURES TAB tab
@@ -301,11 +317,9 @@ def emsReport():
     eso.ssEms("incident.disposition.unitDispositionItemID", "Made")
     eso.ssEms("incident.disposition.patientEvaluationCareDispositionItemID", "Care Prov")
     eso.ssEms("incident.disposition.crewDispositionItemID", "Cont")
-    eso.ssEms("incident.disposition.transportDispositionItemID", "Another EMS")
-    eso.ssEms("incident.disposition.transferredToLocationTypeID", "Ground")
-
-
-
+    if (len(d.hospital.get()) > 0): 
+        eso.ssEms("incident.disposition.transportDispositionItemID", "Another EMS")
+        eso.ssEms("incident.disposition.transferredToLocationTypeID", "Ground")
 
     if (0 and len(d.hospital.get()) > 0): 
         eso.ssEms("incident.response.dispositionItemID", "Pt Care T")
@@ -321,7 +335,6 @@ def emsReport():
         eso.ssEms("incident.response.dispositionItemID", "No Treatment")
 
     eso.ssEms("incident.scene.manualAddress.locationTypeID", "Home")
-
     eso.yesno("incident.response.isFirstUnitOnSceneID", "Yes" if d.firstUnit.get() else "No")
     eso.yesno("incident.scene.massCasualty", "No")
 
@@ -385,12 +398,6 @@ def emsReport():
         except Exception as e:
             print(e)
 
-    ###################################################33
-    # PATIENT tab
-    eso.cl('//li[@class="patient patient-bg"]')
-    sleep(1)
-    #ssEms("patient.demographics.ethnicityId", "Not")
-    eso.ssEms("patient.demographics.genderId", ("Male" if d.male.get() else "Female"))
 
 
     ###################################################33
