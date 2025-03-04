@@ -17,6 +17,7 @@ FILEC="$FILE".centered.stl
 ADHESION=none
 echo $FILE | grep _brim > /dev/null && ADHESION=brim
 
+# from git clone https://github.com/AllwineDesigns/stl_cmd.git
 stl_binary "$FILE" "$FILE".bin
 stl_center "$FILE".bin "$FILEC"
 
