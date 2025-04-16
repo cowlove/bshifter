@@ -13,6 +13,7 @@ eso = Eso()
 
 defaultStation = "54"
 defaultUnit = "E354"
+#defaultZip = "98168 "
 defaultZip = "98168 "
 
 class MyDialog(simpledialog.Dialog):

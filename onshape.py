@@ -14,7 +14,7 @@ if (w.exists('//a[@class="alert-link os-message-bubble-link"]')):
     w.click('//a[@class="alert-link os-message-bubble-link"]', 2)
 
 if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
-    w.disableDownloadDialog()
+    #w.disableDownloadDialog()
 
     # Can't see partStudio tab, try logging in and reselecting first document  
     w.get("https://cad.onshape.com/signin")
