@@ -3,3 +3,5 @@ __pycache__
 *.txt
 *.gcode
 JUNK
+go.sh
+curaslice.sh
