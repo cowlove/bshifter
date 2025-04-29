@@ -6,8 +6,8 @@ alias octoprint-cli echo
 octoprint-cli connection connect
 octoprint-cli connection connect
 octoprint-cli connection connect
-octoprint-cli -v temp bed  65
-octoprint-cli -v temp extruder 180
+octoprint-cli -v temp bed 50 
+octoprint-cli -v temp extruder 185 
 
 #./onshape.py
 # TODO onshape.py should return this filename 

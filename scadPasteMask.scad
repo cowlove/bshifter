@@ -1,3 +1,5 @@
+// Good results printing this with .12 layer, 110% flow, zoffset tight to bed
+
 module bbox() { 
     // a 3D approx. of the children projection on X axis 
     module xProjection() 
@@ -29,40 +31,44 @@ module bbox() {
    shrink() bbx() children(); 
 }
 
-th = .24 / 25.4;
-border=2/25.4;
+th = .12 / 25.4;
+borderh=1.7/25.4;
+borderw=3/25.4; // was 3 
+pocket=.3/25.4;
+paste_relief=-.02/25.4;
 
 scale([25.4,25.4,25.4])
 union() { 
 difference() { 
     union() {  
-        translate([0,-border,0]) 
-            translate([-border,0,0]) 
+        translate([0,-borderw,0]) 
+            translate([-borderw,0,0]) 
                 bbox() 
-                    linear_extrude(height = border, center = false, convexity = 10) 
+                    linear_extrude(height = borderh, center = false, convexity = 10) 
                         mirror([0,1,0]) 
                             import(str(proj, "-Edge_Cuts.dxf"));
-        translate([0,-border,0]) 
-            translate([-border,0,0]) 
+        translate([0,-borderw,0]) 
+            translate([+borderw,0,0]) 
                 bbox() 
-                    linear_extrude(height = border, center = false, convexity = 10) 
+                    linear_extrude(height = borderh, center = false, convexity = 10) 
                         mirror([0,1,0]) 
                             import(str(proj, "-Edge_Cuts.dxf"));
     }
-    bbox() linear_extrude(height = border, center = false, convexity = 10) 
+    bbox() linear_extrude(height = borderh, center = false, convexity = 10) 
             mirror([0,1,0]) 
-            import(str(proj, "-Edge_Cuts.dxf"));
+                offset(r=pocket)
+			import(str(proj, "-Edge_Cuts.dxf"));
 }
 
 difference()  {
     bbox() 
         linear_extrude(height = th, center = false, convexity = 10) 
             mirror([0,1,0]) 
-		offset(r=5/25.4)
+		offset(r=borderw + 5/25.4)
                             import(str(proj, "-Edge_Cuts.dxf"));
         linear_extrude(height = th, center = false, convexity = 10) 
             mirror([0,1,0]) 
-                offset(r=.1/25.4)
+                offset(r=paste_relief)
                     import(str(proj, "-F_Paste.dxf"));
  
     
