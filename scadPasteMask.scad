@@ -1,4 +1,5 @@
-// Good results printing this with .12 layer, 110% flow, zoffset tight to bed
+// Good results printing this with .12 layer, 110% flow, zoffset tight to bed, 
+// stepper barely buzzing with no paper 
 
 module bbox() { 
     // a 3D approx. of the children projection on X axis 
