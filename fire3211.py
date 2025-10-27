@@ -285,7 +285,8 @@ def emsReport():
     eso.cl('//li[@class="signatures signatures-bg"]')
     sleep(1)
     eso.cl('//div[text()="Provider Signatures"]')
-    if eso.exists('(//eso-signature)[1]//div[@class="signing-area signature signed-bg"]'):
+    #if eso.exists('(//eso-signature)[1]//div[@class="signing-area signature signed-bg"]'):
+    if 1:
         print("ALREADY SIGNED")
     else:
         print("NOT SIGNED")

@@ -23,10 +23,11 @@ if not w.exists('//tab-list-item[@class="os-tab-bar-tab active"]'):
     e = w.exists('//input[@placeholder="Email"]')
     if e: 
         w.keys('//input[@placeholder="Email"]', "jim@vheavy.com")
+        w.click('//button[@class="btn btn-primary continue-button"]')
         w.keys('//input[@placeholder="Password"]', "tlatla53OS")
         w.click('//button[text()="Sign in"]')
     w.click('//img[@class="navbar-onshape-logo"]')
-    w.click('(//span[@class="os-document-display-name"])[1]') # First document in list
+    w.click('(//div[@class="osx-last-opened-item ng-star-inserted"])[1]') # First document in list
 
 w.waitPageLoaded()
 e = w.waitInteractable('(//span[contains(@class, "os-tab-name")])[1]')
