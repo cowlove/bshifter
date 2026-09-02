@@ -13,9 +13,9 @@ eso = Eso()
 
 defaultStation = "54"
 defaultUnit = "E354"
-#defaultZip = "98168 "
 defaultZip = "98168 "
-
+#defaultZip = "98032 "
+defaultName = "evans"
 class MyDialog(simpledialog.Dialog):
     def __init__(self, master):
         self.okPressed = False
@@ -104,7 +104,7 @@ class MyDialog(simpledialog.Dialog):
         self.row = 0;
 
 
-        (dummy, self.name) = self.addTextEntry(master, "FF Name", "evans")
+        (dummy, self.name) = self.addTextEntry(master, "FF Name", defaultName)
         (dummy, self.station) = self.addTextEntry(master, "Station", defaultStation)
         (dummy, self.unit) = self.addTextEntry(master, "Unit", defaultUnit)
         (dummy, self.zip) = self.addTextEntry(master, "Zip", defaultZip)
