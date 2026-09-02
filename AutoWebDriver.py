@@ -47,14 +47,16 @@ def daemon(idFile):
     opt = webdriver.FirefoxOptions()
     opt.set_preference("geo.enabled", False)
     opt.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/sla")
+    # Do not open Firefox's downloads panel/toaster after automated downloads.
+    # This must be set before Firefox starts; changing a profile afterward has
+    # no effect on the already-running daemon browser.
+    opt.set_preference("browser.download.alwaysOpenPanel", False)
+    opt.set_preference("browser.download.manager.showWhenStarting", False)
     try:
         driver = webdriver.Firefox( options=opt)  
     except:
         serv = webdriver.FirefoxService( executable_path='/snap/bin/geckodriver' )
         driver = webdriver.Firefox( options=opt, service=serv)  
-
-    profile = webdriver.FirefoxProfile()
-    profile.set_preference("browser.download.alwaysOpenPanel", False)
 
     print("Daemon: started firefox")
     url = driver.command_executor._url  
@@ -235,4 +237,3 @@ class AutoWebDriver:
     def finish(self):
         if self.startedServer == True:
             print("Continuing to host selenium server, ^C to exit...")
-
